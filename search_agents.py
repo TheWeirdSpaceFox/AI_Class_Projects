@@ -603,7 +603,6 @@ def maze_distance(point1, point2, game_state):
 
     Example usage: maze_distance( (2,4), (5,6), game_state)
 
-    This might be a useful helper function for your ApproximateSearchAgent.
     """
     x1, y1 = point1
     x2, y2 = point2
