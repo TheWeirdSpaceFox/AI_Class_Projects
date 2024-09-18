@@ -334,7 +334,7 @@ class CornersProblem(search.SearchProblem):
 
         # *** YOUR CODE HERE ***
 
-        util.raise_not_defined()
+        return (self.starting_position,[])
 
     def is_goal_state(self, state):
         """
@@ -343,7 +343,14 @@ class CornersProblem(search.SearchProblem):
 
         # *** YOUR CODE HERE ***
 
-        util.raise_not_defined()
+        current = state[0]
+        expanded_corners = state[1]
+
+        if current in self.corners:
+            if not current in expanded_corners:
+                expanded_corners.append(current)
+            return len(expanded_corners) == 4
+        return False
 
     def get_successors(self, state):
         """
@@ -357,6 +364,9 @@ class CornersProblem(search.SearchProblem):
         """
 
         successors = []
+        x, y = state[0]
+        expanded_corners = state[1]
+
         for action in [Directions.NORTH, Directions.SOUTH, Directions.EAST, Directions.WEST]:
             # Add a successor state to the successor list if the action is legal
             # Here's a code snippet for figuring out whether a new position hits a wall:
@@ -366,6 +376,17 @@ class CornersProblem(search.SearchProblem):
             #   hitsWall = self.walls[nextx][nexty]
 
             '*** YOUR CODE HERE ***'
+            dx, dy = Actions.direction_to_vector(action)
+            nextx, nexty = int(x + dx), int(y + dy)
+            hits_wall = self.walls[nextx][nexty]
+            if not hits_wall:
+                successor_visited_corners = list(expanded_corners)
+                next_node = (nextx, nexty)
+                if next_node in self.corners:
+                    if next_node not in successor_visited_corners:
+                        successor_visited_corners.append(next_node)
+                successor = ((next_node, successor_visited_corners), action, 1)
+                successors.append(successor)
 
         # DO NOT CHANGE BELOW
         self._expanded += 1
@@ -409,7 +430,22 @@ def corners_heuristic(state, problem):
 
     # *** YOUR CODE HERE ***
 
-    return 0  # Default to trivial solution
+    expanded_corners = state[1]
+    corners_left_to_visit = []
+    for corner in corners:
+        if corner not in expanded_corners:
+            corners_left_to_visit.append(corner)
+
+    total_cost = 0
+    coordinate = state[0]
+    cur_point = coordinate
+    while corners_left_to_visit:
+        heuristic_cost, corner = \
+            min([(util.manhattan_distance(cur_point, corner), corner) for corner in corners_left_to_visit])
+        corners_left_to_visit.remove(corner)
+        cur_point = corner
+        total_cost += heuristic_cost
+    return total_cost
 
 
 class AStarCornersAgent(SearchAgent):
