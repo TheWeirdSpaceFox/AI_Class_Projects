@@ -552,7 +552,7 @@ def food_heuristic(state, problem):
 
     # *** YOUR CODE HERE ***
 
-    return 0
+    return len(food_grid.as_list())
 
 
 class ClosestDotSearchAgent(SearchAgent):
@@ -588,7 +588,7 @@ class ClosestDotSearchAgent(SearchAgent):
 
         # *** YOUR CODE HERE ***
 
-        util.raise_not_defined()
+        return search.astar(problem)
 
 
 class AnyFoodSearchProblem(PositionSearchProblem):
@@ -628,7 +628,11 @@ class AnyFoodSearchProblem(PositionSearchProblem):
 
         # *** YOUR CODE HERE ***
 
-        util.raise_not_defined()
+        distance, goal = min([(util.manhattan_distance(state, goal), goal) for goal in self.food.as_list()])
+        if state == goal:
+            return True
+        else:
+            return False
 
 
 def maze_distance(point1, point2, game_state):
