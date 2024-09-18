@@ -119,8 +119,25 @@ def breadth_first_search(problem):
     """Search the shallowest nodes in the search tree first."""
 
     # *** YOUR CODE HERE ***
+    start = problem.get_start_state()
+    if problem.is_goal_state(start):
+        return []
 
-    util.raise_not_defined()
+    temp = util.Queue()
+    expanded = []
+    temp.push((start, []))
+
+    while not temp.is_empty():
+        current, actions = temp.pop()
+        if current not in expanded:
+            expanded.append(current)
+
+            if problem.is_goal_state(current):
+                return actions
+
+            for next, action, cost in problem.get_successors(current):
+                new_action = actions + [action]
+                temp.push((next, new_action))
 
 
 def uniform_cost_search(problem):
