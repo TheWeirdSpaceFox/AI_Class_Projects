@@ -145,7 +145,26 @@ def uniform_cost_search(problem):
 
     # *** YOUR CODE HERE ***
 
-    util.raise_not_defined()
+    start = problem.get_start_state()
+    if problem.is_goal_state(start):
+        return []
+
+    temp = util.PriorityQueue()
+    expanded = []
+    temp.push((start, [], 0), 0)
+
+    while not temp.is_empty():
+        current, actions, past_cost = temp.pop()
+        if current not in expanded:
+            expanded.append(current)
+
+            if problem.is_goal_state(current):
+                return actions
+
+            for next, action, cost in problem.get_successors(current):
+                new_action = actions + [action]
+                total_cost = cost + past_cost
+                temp.push((next, new_action, total_cost), total_cost)
 
 
 def null_heuristic(_, __):
