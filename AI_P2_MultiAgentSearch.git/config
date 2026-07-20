@@ -1,0 +1,10 @@
+[core]
+	repositoryformatversion = 0
+	filemode = false
+	bare = true
+	symlinks = false
+	ignorecase = true
+[remote "origin"]
+	url = https://student-gitlab.sec.cnu.edu/amanda.sanders.20-ai-f24/AI_P2_MultiAgentSearch.git
+	fetch = +refs/*:refs/*
+	mirror = true
